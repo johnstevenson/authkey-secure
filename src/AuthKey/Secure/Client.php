@@ -25,7 +25,7 @@ class Client extends \AuthKey\Transport\Client
 
     $this->setOption('strict', true);
 
-    $method = $data ? 'POST' : 'GET';
+    $method = $content ? 'POST' : 'GET';
 
     if (!parent::send($method, $url, $content))
     {
