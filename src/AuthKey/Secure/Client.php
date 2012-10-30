@@ -23,7 +23,7 @@ class Client extends \AuthKey\Transport\Client
       return false;
     }
 
-    $this->setOption('strict', true);
+    $this->setStrict(true);
 
     $method = $data ? 'POST' : 'GET';
 
