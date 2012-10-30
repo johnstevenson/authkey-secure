@@ -13,23 +13,22 @@ class Client extends \AuthKey\Transport\Client
   private $ssl = false;
 
 
-  public function send($url, $content)
+  public function send($url, $data)
   {
 
     $this->ssl = stripos($url, 'https://') !== false;
 
-    if (!$this->requestEncode($content))
+    if (!$this->requestEncode($data))
     {
       return false;
     }
 
     $this->setOption('strict', true);
 
-    $method = $content ? 'POST' : 'GET';
+    $method = $data ? 'POST' : 'GET';
 
-    if (!parent::send($method, $url, $content))
+    if (!parent::send($method, $url, $data))
     {
-      $this->setErrorData();
       return false;
     }
 
@@ -38,12 +37,12 @@ class Client extends \AuthKey\Transport\Client
   }
 
 
-  private function requestEncode(&$content)
+  private function requestEncode(&$data)
   {
 
-    if (!is_string($content))
+    if (!is_string($data))
     {
-      $this->setError(static::ERR_INTERNAL, 'Invalid request content: ' . gettype($content));
+      $this->setError(static::ERR_INTERNAL, 'Invalid request content: ' . gettype($data));
       return false;
     }
 
@@ -51,7 +50,7 @@ class Client extends \AuthKey\Transport\Client
 
     $enc = '';
 
-    if (!$this->encoder->encode($content, $enc))
+    if (!$this->encoder->encode($data, $enc))
     {
       $this->setError(static::ERR_INTERNAL, 'Encryption failed');
       return false;
@@ -78,27 +77,6 @@ class Client extends \AuthKey\Transport\Client
     }
 
     return $res;
-
-  }
-
-
-  private function setErrorData()
-  {
-
-    if ($this->errorCode === static::ERR_REQUEST && $this->output)
-    {
-
-      if ($ar = @json_decode($this->output, true))
-      {
-
-        if (Utils::get($ar, 'code') && Utils::get($ar, 'message'))
-        {
-          $this->error = $this->errorCode . ': ' . $this->output;
-        }
-
-      }
-
-    }
 
   }
 
