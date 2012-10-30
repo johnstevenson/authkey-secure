@@ -42,7 +42,7 @@ class Client extends \AuthKey\Transport\Client
 
     if (!is_string($data))
     {
-      $this->setError(static::ERR_INTERNAL, 'Invalid request content: ' . gettype($data));
+      $this->setError(static::ERR_INTERNAL, 'Invalid request data: ' . gettype($data));
       return false;
     }
 
