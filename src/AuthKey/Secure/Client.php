@@ -13,12 +13,12 @@ class Client extends \AuthKey\Transport\Client
   private $ssl = false;
 
 
-  public function send($method, $url, $data)
+  public function send($url, $content)
   {
 
     $this->ssl = stripos($url, 'https://') !== false;
 
-    if (!$this->requestEncode($data))
+    if (!$this->requestEncode($content))
     {
       return false;
     }
@@ -27,7 +27,7 @@ class Client extends \AuthKey\Transport\Client
 
     $method = $data ? 'POST' : 'GET';
 
-    if (!parent::send($method, $url, $data))
+    if (!parent::send($method, $url, $content))
     {
       $this->setErrorData();
       return false;
@@ -43,7 +43,7 @@ class Client extends \AuthKey\Transport\Client
 
     if (!is_string($content))
     {
-      $this->setError(static::ERR_INTERNAL, 'Invalid content: ' . gettype($content));
+      $this->setError(static::ERR_INTERNAL, 'Invalid request content: ' . gettype($content));
       return false;
     }
 
@@ -104,4 +104,3 @@ class Client extends \AuthKey\Transport\Client
 
 
 }
-
