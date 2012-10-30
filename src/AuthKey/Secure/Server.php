@@ -15,7 +15,7 @@ class Server extends \AuthKey\Transport\Server
   private $handlers = array();
 
 
-  public function __construct(array $handlers)
+  public function __construct(array $handlers, array $options = array())
   {
 
     $this->handlers = array(
@@ -27,7 +27,7 @@ class Server extends \AuthKey\Transport\Server
       'authorize' => array($this, 'authorize'),
     );
 
-    parent::__construct($internal_handlers);
+    parent::__construct($internal_handlers, $options);
 
   }
 
@@ -61,7 +61,7 @@ class Server extends \AuthKey\Transport\Server
 
   /**
   * Sets the content and (optional headers) for the response.
-  * Note that acontent-type header may be overwritten due to encoding
+  * Note that a content-type header may be overwritten due to encoding
   *
   * @param string $content
   * @param array $headers
