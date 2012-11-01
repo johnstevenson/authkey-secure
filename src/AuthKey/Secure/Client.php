@@ -68,7 +68,7 @@ class Client extends \AuthKey\Transport\Client
         # and set it as an xheader if we don't already have one
         if (!$xcontent = Utils::get($this->options['xheaders'], 'content-type'))
         {
-          $this->setXHeader('content-type'. $content);
+          $this->setXHeader('content-type', $content);
         }
 
       }
