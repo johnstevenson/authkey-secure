@@ -13,8 +13,10 @@ class Client extends \AuthKey\Transport\Client
   private $ssl = false;
 
 
-  public function send($url, $data)
+  public function send($method, $url, $data = '')
   {
+
+    $method = strtoupper($method);
 
     $this->ssl = stripos($url, 'https://') !== false;
 
@@ -24,8 +26,6 @@ class Client extends \AuthKey\Transport\Client
     }
 
     $this->setStrictMode(true);
-
-    $method = $data ? 'POST' : 'GET';
 
     if (!parent::send($method, $url, $data))
     {
