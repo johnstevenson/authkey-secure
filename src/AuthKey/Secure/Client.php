@@ -56,8 +56,26 @@ class Client extends \AuthKey\Transport\Client
       return false;
     }
 
-    $this->setXHeader('enc', $enc);
-    $this->setHeader('Content-Type', 'application/octet-stream');
+    if ($enc)
+    {
+
+      $this->setXHeader('enc', $enc);
+
+      # see if a content-type header has been set
+      if ($content = Utils::get($this->options['headers'], 'Content-Type'))
+      {
+
+        # and set it as an xheader if we don't already have one
+        if (!$xcontent = Utils::get($this->options['xheaders'], 'content-type'))
+        {
+          $this->setXHeader('content-type'. $content);
+        }
+
+      }
+
+      $this->setHeader('Content-Type', 'application/octet-stream');
+
+    }
 
     return true;
 
