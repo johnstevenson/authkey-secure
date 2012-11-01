@@ -79,12 +79,13 @@ class Server extends \AuthKey\Transport\Server
   public function authorize(Server $Server)
   {
 
+    $enc = $this->getRequestXHeader('enc');
     $error = null;
 
     if (!$this->ssl)
     {
 
-      if (!$enc = $Server->getRequestXHeader('enc'))
+      if (!$enc)
       {
         $error = 'Required x-header is missing: enc';
       }
@@ -105,9 +106,47 @@ class Server extends \AuthKey\Transport\Server
       );
 
     }
-    else
+
+    # if we have been encoded, we will have replaced the Content-Type header
+    if ($enc)
     {
-      return Utils::callHandler($this->handlers, 'authorize', array($this));
+
+      if ($content = $this->getRequestXHeader('content-type'))
+      {
+        $_SERVER['CONTENT_TYPE'] = $content;
+      }
+
+    }
+
+    return Utils::callHandler($this->handlers, 'authorize', array($this));
+
+  }
+
+
+  private function checkEnc(&$enc, &$error)
+  {
+
+    $enc = $this->getRequestXHeader('enc');
+
+    if (!$this->ssl && !$enc)
+    {
+      $error = 'Required x-header is missing: enc';
+
+      return;
+    }
+
+    if (!$this->ssl)
+    {
+
+      if (!$enc = $this->getRequestXHeader('enc'))
+      {
+        $error = 'Required x-header is missing: enc';
+      }
+      elseif (strpos($enc, Encoder::ENC_AES) === false)
+      {
+        $error = 'Required x-header enc is missing value: ' . Encoder::ENC_AES;
+      }
+
     }
 
   }
