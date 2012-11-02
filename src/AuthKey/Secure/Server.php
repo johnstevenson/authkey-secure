@@ -44,7 +44,8 @@ class Server extends \AuthKey\Transport\Server
 
     $this->config($options);
 
-    $this->input = parent::receive();
+    parent::receive();
+    $this->input =  @file_get_contents('php://input');
     $this->inputDecode();
 
     if (!empty($this->handlers['process']))
