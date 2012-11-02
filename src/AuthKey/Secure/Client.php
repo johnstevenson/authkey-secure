@@ -87,14 +87,25 @@ class Client extends \AuthKey\Transport\Client
 
     $enc = Utils::get($this->xheaders, 'enc');
 
-    $res = $this->encoder->decode($this->output, $enc);
-
-    if (!$res)
+    if (!$this->encoder->decode($this->output, $enc))
     {
       $this->setError(static::ERR_INTERNAL, 'Decryption failed');
+      return false;
     }
 
-    return $res;
+    if ($enc)
+    {
+
+      # see if a content-type xheader has been set
+      if ($content = Utils::get($this->xheaders, 'content-type'))
+      {
+        # and set it as a header
+        $this->headers['Content-Type'] = $content;
+      }
+
+    }
+
+    return true;
 
   }
 
