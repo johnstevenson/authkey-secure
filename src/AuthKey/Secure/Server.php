@@ -42,7 +42,7 @@ class Server extends \AuthKey\Transport\Server
       'public' => false,
     );
 
-    $this->config($options);
+    Utils::config($this->options, $options);
 
     parent::receive();
     $this->input =  @file_get_contents('php://input');
