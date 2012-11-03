@@ -27,6 +27,9 @@ class Server extends \AuthKey\Transport\Server
       'authorize' => array($this, 'authorize'),
     );
 
+    $options['public'] = false;
+    $options['strict'] = true;
+
     parent::__construct($internal_handlers, $options);
 
   }
@@ -37,14 +40,8 @@ class Server extends \AuthKey\Transport\Server
 
     $this->ssl = isset($_SERVER["HTTPS"]) && strtolower($_SERVER["HTTPS"]) !== "off";
 
-    $options = array(
-      'strict' => true,
-      'public' => false,
-    );
-
-    Utils::config($this->options, $options);
-
     parent::receive();
+
     $this->input =  @file_get_contents('php://input');
     $this->inputDecode();
 
