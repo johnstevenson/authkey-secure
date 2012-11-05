@@ -25,7 +25,7 @@ class Client extends \AuthKey\Transport\Client
       return false;
     }
 
-    $this->setStrictMode(true);
+    $this->setUnsigned(false);
 
     if (!parent::send($method, $url, $data))
     {

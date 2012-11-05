@@ -28,7 +28,7 @@ class Server extends \AuthKey\Transport\Server
     );
 
     $options['public'] = false;
-    $options['strict'] = true;
+    $options['unsigned'] = false;
 
     parent::__construct($internal_handlers, $options);
 
@@ -69,6 +69,7 @@ class Server extends \AuthKey\Transport\Server
 
     $headers = (array) $headers;
     $this->outputEncode($content, $headers);
+    $this->setUnsigned(false);
     parent::reply($content, $headers);
 
   }
